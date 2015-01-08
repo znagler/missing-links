@@ -10,7 +10,6 @@ $( document ).ready(function() {
 					data: {start_wiki: $('.start-input').val()},
 				})
 				.done(function(response) {
-					console.log(response)
 					$('.show-start').text(response)
 				})
 				}
@@ -29,7 +28,6 @@ $( document ).ready(function() {
 					data: {finish_wiki: $('.finish-input').val()},
 				})
 				.done(function(response) {
-					console.log(response)
 					$('.show-finish').text(response)
 				})
 				}
