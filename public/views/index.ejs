@@ -7,17 +7,16 @@
 </head>
 <body>
 	<center>
-		<h1>WIKI scraper</h1>
-		<p>will this work? </p>
+		<h1>WIKI Linker</h1>
 		<form action="post_test" method="post">
 			<input class="start-input field-light" name='start_wiki' autocomplete="off">
 			<input class="finish-input field-light" name='finish_wiki' autocomplete="off">
 		</form>
 		<div>
-			<p> Your starting page is: <span class="show-start"></span></p> 
+			<p> Your starting page is: <a class="start-link" href="en.wikipedia.org">/wiki/<span class="show-start"></span></a></p> 
 		</div>
 		<div> 
-			<p> Your finish page is: <span class="show-finish"></span></p>
+			<p> Your finish page is: <a class="finish-link" href="en.wikipedia.org">/wiki/<span class="show-finish"></span></a></p>
 		</div>
 		<button class="button-gray mb1">....</button>
 	</center>

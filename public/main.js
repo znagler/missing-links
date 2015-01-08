@@ -2,6 +2,24 @@ $( document ).ready(function() {
 
 	setEvents()
 
+	$( "button" ).click(function() {
+		var route = $('.start-link').attr("href")
+	  console.log(route);
+
+	$.ajax({
+		url: '/get-links',
+		type: 'POST',
+		data: {link: route},
+	})
+	.done(function(response) {
+
+		console.log(response)
+	})
+
+
+
+	});
+
 })
 
 
@@ -37,33 +55,47 @@ function setEvents(){
 			if ($('.finish-input').val() != ""){
 				finishInputAjax()
 			}
-			
-		}, 150 )
+
+		}, 500 )
 	})
 
 }
 
 function startInputAjax(){
-				$.ajax({
-					url: '/start',
-					type: 'POST',
-					data: {start_wiki: $('.start-input').val()},
-				})
-				.done(function(response) {
-					$('.show-start').text(response)
-					setButtonColorAndMessage()
-				})
+	$.ajax({
+		url: '/start',
+		type: 'POST',
+		data: {start_wiki: $('.start-input').val()},
+	})
+	.done(function(response) {
+		$('.show-start').text(response)
+		setButtonColorAndMessage()
+		setStartLink(response)
+	})
 }
 
 
 function finishInputAjax(){
-				$.ajax({
-					url: '/finish',
-					type: 'POST',
-					data: {finish_wiki: $('.finish-input').val()},
-				})
-				.done(function(response) {
-					$('.show-finish').text(response)
-					setButtonColorAndMessage()
-				})
+	$.ajax({
+		url: '/finish',
+		type: 'POST',
+		data: {finish_wiki: $('.finish-input').val()},
+	})
+	.done(function(response) {
+		$('.show-finish').text(response)
+		setButtonColorAndMessage()
+		setFinishLink(response)
+	})
 }
+
+
+function setStartLink(page){
+	$('.start-link').attr('href',"http://en.wikipedia.org/wiki/"+page);
+
+}
+
+function setFinishLink(page){
+	$('.finish-link').attr('href',"http://en.wikipedia.org/wiki/"+page);
+	
+}
+
