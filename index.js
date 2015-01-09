@@ -4,6 +4,7 @@ var request = require('request');
 var cheerio = require('cheerio');
 var http = require('http');
 var bodyParser = require('body-parser')
+var cool = require('./cool');
 
 app.set('views', __dirname + '/public/views');
 app.set('view engine', 'ejs');
@@ -42,8 +43,13 @@ app.post('/finish', function (req, res) {
 
 app.post('/get-links', function (req, res) {
 
+	cool.foo()
+
+	var cat = new cool.Linkset("billy")
 	getLinks(req.body.link, function(response){
+		console.log(response)
 		res.send(response)
+
 	})
 
 })
@@ -60,7 +66,6 @@ function getLinks(url, callback){
 	  if (!error && response.statusCode == 200) {
 	    var $ = cheerio.load(html);
 	    var links = $('a')
-			var hrefObject = {}
 			var hrefArray = []
 			var index = 0
 		$(links).each(function(i, link){
@@ -68,18 +73,14 @@ function getLinks(url, callback){
 			var href = $(link).attr('href')
 
 			if (/^\/wiki[^:]*$/.test(href) && href != current && href != "/wiki/Main_Page" && href != "/wiki/International_Standard_Book_Number"){
-				hrefObject["num"+index] = href
 				hrefArray[index] = href
 				index++
 				}
 
 		  })
-		console.log(arrayUnique(hrefArray))
-		callback(hrefObject)
+		callback(hrefArray)
 	  }
 	})
-
-
 }
 
 
