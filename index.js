@@ -41,31 +41,11 @@ app.post('/finish', function (req, res) {
 
 
 app.post('/get-links', function (req, res) {
-	console.log("in ajax")
-	var current = ("/wiki/"+req.body.link.match(/\/([^/]*)$/)[1])
-	request(req.body.link, function (error, response, html) {
-	  if (!error && response.statusCode == 200) {
-	    var $ = cheerio.load(html);
-	    var links = $('a')
-			var hrefObject = {}
-			var index = 0
-		$(links).each(function(i, link){
 
-			var href = $(link).attr('href')
-
-
-
-			if (/^\/wiki[^:]*$/.test(href) && href != current && href != "/wiki/Main_Page"){
-				hrefObject["num"+index] = href
-				index++
-				}
-
-		  })
-		res.send(hrefObject)
-	    // res.end($('link')['0']['attribs']['href'].match(/\/([^/]*)$/)[1]);
-	  }
+	getLinks(req.body.link, function(response){
+		res.send(response)
 	})
-	// res.end("wassup")
+
 })
 
 
@@ -73,3 +53,41 @@ app.post('/get-links', function (req, res) {
 app.listen(app.get('port'), function() {
   console.log("Node app is running at localhost:" + app.get('port'));
 });
+
+function getLinks(url, callback){
+	var current = ("/wiki/"+url.match(/\/([^/]*)$/)[1])
+	request(url, function (error, response, html) {
+	  if (!error && response.statusCode == 200) {
+	    var $ = cheerio.load(html);
+	    var links = $('a')
+			var hrefObject = {}
+			var hrefArray = []
+			var index = 0
+		$(links).each(function(i, link){
+
+			var href = $(link).attr('href')
+
+			if (/^\/wiki[^:]*$/.test(href) && href != current && href != "/wiki/Main_Page" && href != "/wiki/International_Standard_Book_Number"){
+				hrefObject["num"+index] = href
+				hrefArray[index] = href
+				index++
+				}
+
+		  })
+		console.log(arrayUnique(hrefArray))
+		callback(hrefObject)
+	  }
+	})
+
+
+}
+
+
+
+
+var arrayUnique = function(a) {
+    return a.reduce(function(p, c) {
+        if (p.indexOf(c) < 0) p.push(c);
+        return p;
+    }, []);
+};
