@@ -3,22 +3,21 @@ $( document ).ready(function() {
 	setEvents()
 
 	$( "button" ).click(function() {
-		var route = $('.start-link').attr("href")
-	  console.log(route);
+
+		var startPage = ("/wiki/"+$('.show-start').text());
+		var finishPage = ("/wiki/"+$('.show-finish').text());
 
 	$.ajax({
 		url: '/get-links',
 		type: 'POST',
-		data: {link: route},
+		data: {startPage: startPage, finishPage: finishPage},
 	})
 	.done(function(response) {
 
 		console.log(response)
 	})
 
-
-
-	});
+	})
 
 })
 
