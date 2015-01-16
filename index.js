@@ -18,18 +18,15 @@ app.get('/', function(request, response) {
 
 app.post('/start', function (req, res) {
 
-
-
 	console.log(req.body)
 
 	var url = "http://en.wikipedia.org/wiki/"+(req.body.start_wiki.split(' ').join('_'))
 	request(url, function (error, response, html) {
 		if (!error && response.statusCode == 200) {
-			var $ = cheerio.load(html);
-			res.end($('link')['0']['attribs']['href'].match(/\/([^/]*)$/)[1]);
+			var $ = cheerio.load(html)
+			res.end($('link')['0']['attribs']['href'].match(/\/([^/]*)$/)[1])
 		}
 	})
-
 })
 
 app.post('/finish', function (req, res) {
@@ -45,31 +42,69 @@ app.post('/finish', function (req, res) {
 
 
 app.post('/get-links', function (req, res) {
-
-	var secondLinks = []
-	console.log(req.body)
-
 	var newPath = new cool.Path(req.body.startPage, req.body.finishPage)
-	console.log(newPath.nameTest)
-	console.log(newPath.secondLinks)
-	console.log(newPath.firstLinks)
+	// newPath.startPoll(function(){
+	// 	console.log(newPath.successObject)
+	// 	res.send(newPath.successObject)
+	// 	return
+	// })
+
+	// set zero degree
+	if (newPath.firstLinks.indexOf(newPath.finishPage) > -1){
+		newPath.successObject.degree0 = true
+	} else {
+		newPath.successObject.degree0 = false
+	}
+
+	// 
+	newPath.getLinksOnBacklinkPage(newPath.finishPage,function(response){
+		newPath.firstBackLinks = response
+		newPath.firstBackLinks.forEach(function(page, index) {
+			newPath.getLinksOnPage(page,function(responseTwo){
+				responseTwo.forEach(function(entryTwo,indexTwo){
+					if (entryTwo[0] == newPath.finishPage){
+						newPath.confirmedBackLinks.push([page,entryTwo[1]])
+					} 
+					if (index == newPath.firstBackLinks.length - 1  && indexTwo == responseTwo.length - 1){
+
+						setTimeout(function () {
+							console.log("BL ready")
+							newPath.backLinksReady = true
+						}, 500)
+					}
+				})
+			})
+		})
+	})
+
+
 
 	newPath.getLinksOnPage(newPath.startPage,function(response){
 		newPath.firstLinks = response
-		response.forEach(function(page, index) {
-			var url = "http://en.wikipedia.org" + page
-			newPath.getLinksOnPage(page,function(responseTwo){
+
+
+
+
+		newPath.firstLinks.forEach(function(page, index) {
+			newPath.getLinksOnPage(page[0],function(responseTwo){
+
 
 				responseTwo.forEach(function(entryTwo,indexTwo) {
 
 					newPath.secondLinks.push([page,entryTwo])
 					if (index == newPath.firstLinks.length - 1  && indexTwo == responseTwo.length - 1){
-						console.log(newPath.secondLinks.length)
-
 
 						setTimeout(function () {
-							console.log(newPath.secondLinks.length)
-							res.send(newPath.secondLinks)
+							console.log("FL Ready")
+							//
+							// console.log(newPath.secondLinks)
+							// newPath.populateDegreeOne()
+							// newPath.populateDegreeTwo()
+
+							newPath.frontLinksReady = true
+							res.send(newPath.successObject)
+							
+
 						}, 500)
 					}
 				})
@@ -84,27 +119,6 @@ app.listen(app.get('port'), function() {
 	console.log("Node app is running at localhost:" + app.get('port'))
 });
 
-function getLinks(page, callback){
-	var url = "http://en.wikipedia.org" + page
-	request(url, function (error, response, html) {
-		if (!error && response.statusCode == 200) {
-			var $ = cheerio.load(html)
-			var links = $('a')
-			var hrefArray = []
-			var index = 0
-			$(links).each(function(i, link){
-				var href = $(link).attr('href')
-
-				if (/^\/wiki[^:]*$/.test(href) && href != page && href != "/wiki/Main_Page" && href != "/wiki/International_Standard_Book_Number"){
-					hrefArray[index] = href
-					index++
-				}
-
-			})
-			callback(hrefArray)
-		}
-	})
-}
 
 
 var arrayUnique = function(a) {
@@ -112,4 +126,8 @@ var arrayUnique = function(a) {
 		if (p.indexOf(c) < 0) p.push(c);
 		return p;
 	}, [])
-};
+}
+
+
+
+

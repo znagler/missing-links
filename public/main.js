@@ -13,8 +13,12 @@ $( document ).ready(function() {
 		data: {startPage: startPage, finishPage: finishPage},
 	})
 	.done(function(response) {
+		$('.results').append(buildDisplay(startPage,response,finishPage))
 
+		// console.log(startPage)
 		console.log(response)
+		// console.log(finishPage)
+
 	})
 
 	})
@@ -28,8 +32,8 @@ var delay = (function(){
 	return function(callback, ms){
 		clearTimeout (timer);
 		timer = setTimeout(callback, ms);
-	};
-})();
+	}
+})()
 
 function setButtonColorAndMessage(){
 	if ($(".show-start").text()  != "" && $(".show-finish").text()  != ""){
@@ -98,3 +102,9 @@ function setFinishLink(page){
 	
 }
 
+function buildDisplay(start, links, finish){
+	var div = "<div>"+start+"->"
+	div += finish + "<div>"
+	return div
+
+}
