@@ -51,6 +51,7 @@ app.post('/get-links', function (req, res) {
 	  console.log("timeout");
 	  req.abort();
 	});
+	res.send("wtf")
 	
 	// if (form_submitting) return
 	// form_submitting = true
