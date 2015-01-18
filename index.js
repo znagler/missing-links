@@ -47,16 +47,10 @@ app.post('/get-links', function (req, res) {
 
 
 	console.log("post firing")
-	req.setTimeout(5*60*1000,function () {
+	req.setTimeout(8*60*1000,function () {
 	  console.log("timeout");
 	  req.abort();
 	});
-	
-	// if (form_submitting) return
-	// form_submitting = true
-	// res.send("hi")
-	// // console.log(req.body)
-	// // res.send("apple")
 	var newPath = new cool.Path(req.body.startPage, req.body.finishPage)
 
 	// // // newPath.startPoll(function(){
@@ -127,7 +121,6 @@ app.post('/get-links', function (req, res) {
 					if (index == newPath.firstBackLinks.length - 1  && indexTwo == responseTwo.length - 1){
 						setTimeout(function () {
 							console.log("Finishing BL")
-							res.send("wtf")
 
 							// if (newPath.frontLinksReady){
 							// 	newPath.populateDegreeTwo()
@@ -141,18 +134,22 @@ app.post('/get-links', function (req, res) {
 							newPath.firstLinks = innerResponse
 
 							newPath.firstLinks.forEach(function(page, innerIndex) {
+								if (newPath.delivered) return
 
-								// newPath.confirmedBackLinks.forEach(function(backlink){
-								// 	console.log(backlink[0],page[0])
-								// 	if (backlink[0] === page[0]) {
-								// 		res.send(page)
-								// 		return
-								// 		}
+								newPath.confirmedBackLinks.forEach(function(backlink){
+									if (backlink[0] === page[0]) {
+										console.log("ONE DEGREE MATCH")
+										res.status(200).send({one: [page[0],page[1],backlink[1]]})
+										res.end()
+										newPath.delivered = true
+										return
+										}
 
-								// })
+								})
 
 
 								newPath.getLinksOnPage(page[0],function(innerResponseTwo){
+									if (newPath.delivered) return
 									console.log(innerIndex,newPath.firstLinks.length)
 
 
@@ -161,13 +158,11 @@ app.post('/get-links', function (req, res) {
 
 
 									newPath.confirmedBackLinks.forEach(function(backlink){
-										if (backlink[0] === entryTwo[0]){ 
-											var lol = {
-												a:page,
-												b:entryTwo,
-												c:backlink,
-											}
-											res.send(page.concat(entryTwo).concat(backlink))
+										if (backlink[0] === entryTwo[0] && newPath.delivered == false){ 
+											newPath.delivered = true
+
+											res.send({two:[page[1],entryTwo[1],backlink[1],page[0],entryTwo[0]]})
+											res.end()
 											return
 											}
 

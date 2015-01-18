@@ -16,7 +16,7 @@ $( document ).ready(function() {
 		data: {startPage: startPage, finishPage: finishPage},
 	})
 	.done(function(response) {
-		$('.results').append(buildDisplay(startPage,response,finishPage))
+		$('.results').append(response)
 
 		// console.log(startPage)
 		console.log(response)
