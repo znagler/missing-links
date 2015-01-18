@@ -1,31 +1,34 @@
-$( document ).ready(function() {
+$(document).ready(function() {
 	console.log("doc ready")
 
 	setEvents()
 
-	$( "button" ).click(function() {
+	$("button").click(function() {
 		console.log("button click")
 
 
-		var startPage = ("/wiki/"+$('.show-start').text());
-		var finishPage = ("/wiki/"+$('.show-finish').text());
+		var startPage = ("/wiki/" + $('.show-start').text());
+		var finishPage = ("/wiki/" + $('.show-finish').text());
 
-	$.ajax({
-		url: '/get-links',
-		type: 'POST',
-		data: {startPage: startPage, finishPage: finishPage},
-	})
-	.done(function(response) {
-		$('.results').append(response)
+		$.ajax({
+				url: '/get-links',
+				type: 'POST',
+				data: {
+					startPage: startPage,
+					finishPage: finishPage
+				},
+			})
+			.done(function(response) {
+				$('.results').append(response)
 
-		// console.log(startPage)
-		console.log(response)
-		// console.log(finishPage)
+				// console.log(startPage)
+				console.log(response)
+					// console.log(finishPage)
 
-	})
-	.always(function(){
-		console.log("always")
-	})
+			})
+			.always(function() {
+				console.log("always")
+			})
 
 	})
 
@@ -33,83 +36,87 @@ $( document ).ready(function() {
 
 
 
-var delay = (function(){
+var delay = (function() {
 	var timer = 0;
-	return function(callback, ms){
-		clearTimeout (timer);
+	return function(callback, ms) {
+		clearTimeout(timer);
 		timer = setTimeout(callback, ms);
 	}
 })()
 
-function setButtonColorAndMessage(){
-	if ($(".show-start").text()  != "" && $(".show-finish").text()  != ""){
+function setButtonColorAndMessage() {
+	if ($(".show-start").text() != "" && $(".show-finish").text() != "") {
 		$("button").addClass('button-red')
 		$("button").text("GO")
-	} else{
+	} else {
 		$("button").removeClass('button-red')
 	}
 
 }
 
-function setEvents(){
+function setEvents() {
 
-	$('input').keyup(function(){
-		delay(function(){
+	$('input').keyup(function() {
+		delay(function() {
 
-			if ($('.start-input').val() != ""){
+			if ($('.start-input').val() != "") {
 				startInputAjax()
 
 			}
 
-			if ($('.finish-input').val() != ""){
+			if ($('.finish-input').val() != "") {
 				finishInputAjax()
 			}
 
-		}, 500 )
+		}, 500)
 	})
 
 }
 
-function startInputAjax(){
+function startInputAjax() {
 	$.ajax({
-		url: '/start',
-		type: 'POST',
-		data: {start_wiki: $('.start-input').val()},
-	})
-	.done(function(response) {
-		$('.show-start').text(response)
-		setButtonColorAndMessage()
-		setStartLink(response)
-	})
+			url: '/start',
+			type: 'POST',
+			data: {
+				start_wiki: $('.start-input').val()
+			},
+		})
+		.done(function(response) {
+			$('.show-start').text(response)
+			setButtonColorAndMessage()
+			setStartLink(response)
+		})
 }
 
 
-function finishInputAjax(){
+function finishInputAjax() {
 	$.ajax({
-		url: '/finish',
-		type: 'POST',
-		data: {finish_wiki: $('.finish-input').val()},
-	})
-	.done(function(response) {
-		$('.show-finish').text(response)
-		setButtonColorAndMessage()
-		setFinishLink(response)
-	})
+			url: '/finish',
+			type: 'POST',
+			data: {
+				finish_wiki: $('.finish-input').val()
+			},
+		})
+		.done(function(response) {
+			$('.show-finish').text(response)
+			setButtonColorAndMessage()
+			setFinishLink(response)
+		})
 }
 
 
-function setStartLink(page){
-	$('.start-link').attr('href',"http://en.wikipedia.org/wiki/"+page);
+function setStartLink(page) {
+	$('.start-link').attr('href', "http://en.wikipedia.org/wiki/" + page);
 
 }
 
-function setFinishLink(page){
-	$('.finish-link').attr('href',"http://en.wikipedia.org/wiki/"+page);
-	
+function setFinishLink(page) {
+	$('.finish-link').attr('href', "http://en.wikipedia.org/wiki/" + page);
+
 }
 
-function buildDisplay(start, links, finish){
-	var div = "<div>"+start+"->"
+function buildDisplay(start, links, finish) {
+	var div = "<div>" + start + "->"
 	div += finish + "<div>"
 	return div
 
