@@ -51,7 +51,6 @@ app.post('/get-links', function (req, res) {
 	  console.log("timeout");
 	  req.abort();
 	});
-	res.send("wtf")
 	
 	// if (form_submitting) return
 	// form_submitting = true
@@ -128,6 +127,7 @@ app.post('/get-links', function (req, res) {
 					if (index == newPath.firstBackLinks.length - 1  && indexTwo == responseTwo.length - 1){
 						setTimeout(function () {
 							console.log("Finishing BL")
+							res.send("wtf")
 
 							// if (newPath.frontLinksReady){
 							// 	newPath.populateDegreeTwo()
