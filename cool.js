@@ -3,6 +3,7 @@ var request = require('request');
 var cheerio = require('cheerio');
 var util = require('util');
 
+
 var arrayUnique = function(a) {
     return a.reduce(function(p, c) {
         if (p.indexOf(c) < 0) p.push(c)
@@ -22,7 +23,7 @@ module.exports = {
 		this.secondBackLinks = []
 		this.frontLinksReady= false
 		this.confirmedBackLinks = []
-		this.backLinksReady = false
+		this.delivered = false
 		this.successObject = {
 			degree0: null,
 			degree1: [],
@@ -33,7 +34,7 @@ module.exports = {
 			request(url, function (error, response, html) {
 				if (!error && response.statusCode == 200) {
 					var $ = cheerio.load(html);
-					var links = $('a')
+					var links = $('a:not(table *)')
 					var linkDataArray = []
 					var index = 0
 					$(links).each(function(i, link){
@@ -44,8 +45,7 @@ module.exports = {
 						// console.log(link.text())
 
 
-						if (/^\/wiki[^:]*$/.test(href) && href != page && href != "/wiki/Main_Page" && href != "/wiki/International_Standard_Book_Number"){
-							
+						if (link.children[0] && /^\/wiki[^:]*$/.test(href) && href != page && href != "/wiki/Main_Page" && href != "/wiki/International_Standard_Book_Number"){
 							linkDataItem[0] = href
 							linkDataItem[1] = link.children[0].data
 							linkDataArray[index] = linkDataItem
@@ -88,13 +88,23 @@ module.exports = {
 			}.bind(this))
 		}
 		this.populateDegreeTwo = function(){
-			this.firstBackLinks.forEach(function(backlink){
-				this.secondLinks.forEach(function(pair){
-					if (pair[1] == backlink) {
-						this.successObject.degree2.push([pair[0],backlink])
-					}
-					}.bind(this))
-				}.bind(this))
+			this.secondLinks.forEach(function(secondLink){
+				if (secondLink[1][0] == this.finishPage){
+					this.successObject.degree2.push(secondLink)
+				}
+
+			}.bind(this))
+
+
+
+
+			// this.firstBackLinks.forEach(function(backlink){
+			// 	this.secondLinks.forEach(function(pair){
+			// 		if (pair[1] == backlink) {
+			// 			this.successObject.degree2.push([pair[0],backlink])
+			// 		}
+			// 		}.bind(this))
+			// 	}.bind(this))
 		}
 
 		this.startPoll = function(callback){

@@ -1,8 +1,11 @@
 $( document ).ready(function() {
+	console.log("doc ready")
 
 	setEvents()
 
 	$( "button" ).click(function() {
+		console.log("button click")
+
 
 		var startPage = ("/wiki/"+$('.show-start').text());
 		var finishPage = ("/wiki/"+$('.show-finish').text());
@@ -19,6 +22,9 @@ $( document ).ready(function() {
 		console.log(response)
 		// console.log(finishPage)
 
+	})
+	.always(function(){
+		console.log("always")
 	})
 
 	})
