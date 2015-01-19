@@ -20,7 +20,7 @@ $(document).ready(function() {
 			})
 			.fail(function(jqXHR, textStatus ) {
 				console.log("failed but trying again...")
-    	$("button").click()
+    	// $("button").click()
  			 })
 			.done(function(response) {
 				$('.results').append(response)
