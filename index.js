@@ -58,14 +58,14 @@ app.post('/get-links', function(req, res) {
 		newPath.firstBackLinks = response
 		newPath.firstBackLinks.forEach(function(page, index) {
 			newPath.getLinksOnPage(page, function(responseTwo) {
-				console.log("BL", index,newPath.firstBackLinks.length)
+				// console.log("BL", index,newPath.firstBackLinks.length)
 
 				responseTwo.forEach(function(entryTwo, indexTwo) {
 					if (entryTwo[0] == newPath.finishPage) {
 						newPath.confirmedBackLinks.push([page, entryTwo[1]])
 					}
 					if (index == newPath.firstBackLinks.length - 1 && indexTwo == responseTwo.length - 1) {
-						setTimeout(function() {
+						// setTimeout(function() {
 							console.log("Finishing BL")
 							newPath.getLinksOnPage(newPath.startPage, function(innerResponse) {
 								console.log("starting FL")
@@ -85,9 +85,9 @@ app.post('/get-links', function(req, res) {
 											return
 										}
 									})
-									newPath.delivered || newPath.getLinksOnPage(page[0], function(innerResponseTwo) {
+									newPath.getLinksOnPage(page[0], function(innerResponseTwo) {
 										if (newPath.delivered) return
-										console.log(innerIndex, newPath.firstLinks.length)
+										// console.log(innerIndex, newPath.firstLinks.length)
 										innerResponseTwo.forEach(function(entryTwo, innerIndexTwo) {
 											newPath.confirmedBackLinks.forEach(function(backlink) {
 												if (backlink[0] === entryTwo[0] && newPath.delivered == false) {
@@ -104,7 +104,7 @@ app.post('/get-links', function(req, res) {
 									})
 								})
 							})
-						}, 5000)
+						// }, 5000)
 					}
 				})
 			})
