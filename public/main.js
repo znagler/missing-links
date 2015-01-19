@@ -27,6 +27,15 @@ $(document).ready(function() {
 
 				// console.log(startPage)
 				console.log(response)
+				response.backs.forEach(function(backArray){
+
+					response.fronts.forEach(function(frontArray){
+						if (frontArray[0] == backArray[0]){
+							console.log(frontArray,backArray)
+						}
+					})
+				})
+				console.log("done checking")
 					// console.log(finishPage)
 
 			})
