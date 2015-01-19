@@ -18,7 +18,8 @@ $(document).ready(function() {
 					finishPage: finishPage
 				},
 			})
-			.fail(function() {
+			.fail(function(jqXHR, textStatus ) {
+				console.log("failed but trying again...")
     	$("button").click()
  			 })
 			.done(function(response) {
