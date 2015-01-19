@@ -18,6 +18,9 @@ $(document).ready(function() {
 					finishPage: finishPage
 				},
 			})
+			.fail(function() {
+    	$("button").click()
+ 			 })
 			.done(function(response) {
 				$('.results').append(response)
 
