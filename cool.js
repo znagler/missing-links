@@ -67,8 +67,8 @@ module.exports = {
 
 						})
 						var uniqueHrefArray = arrayUnique(hrefArray)
-						if (uniqueHrefArray.length > 1000) {
-							callback(getRandomSubarray(uniqueHrefArray, 1000))
+						if (uniqueHrefArray.length > 1200) {
+							callback(getRandomSubarray(uniqueHrefArray, 1200))
 						} else {
 							callback(uniqueHrefArray)
 						}

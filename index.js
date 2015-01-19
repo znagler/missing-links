@@ -54,6 +54,53 @@ app.post('/get-links', function(req, res) {
 	});
 
 		var newPath = new cool.Path(req.body.startPage, req.body.finishPage)
+			//Start backlinks
+	newPath.getLinksOnBacklinkPage(newPath.finishPage, function(response) {
+		if (newPath.delivered) return
+		console.log("Starting BL")
+		newPath.firstBackLinks = response
+		newPath.firstBackLinks.forEach(function(page, index) {
+				if (newPath.delivered) return
+			newPath.getLinksOnPage(page, function(responseTwo) {
+					if (newPath.delivered) return
+				// console.log("BL", index,newPath.firstBackLinks.length)
+				// console.log(newPath.secondLinks)
+
+				responseTwo.forEach(function(entryTwo, indexTwo) {
+					if (newPath.delivered) return
+					if (entryTwo[0] == newPath.finishPage) {
+						console.log("pushing into backlinks: " +newPath.confirmedBackLinks.length )
+						// console.log("fronts "+newPath.secondLinks.length,"backs"+newPath.confirmedBackLinks.length)
+
+						newPath.confirmedBackLinks.push([page, entryTwo[1]])
+						// newPath.secondLinks.forEach(function(secondLink){
+							// console.log("checking "+page+" and "+secondLink[1][0])
+						console.log(index,newPath.firstBackLinks.length - 1 ,indexTwo,responseTwo.length - 1)
+
+							// if (page === secondLink[1][0]) {
+							// 	res.send([page,secondLink])
+							// 	newPath.delivered = true
+							// 	return
+							// }
+						// })
+						}
+						if (index == newPath.firstBackLinks.length - 1 && indexTwo == responseTwo.length - 1) {
+								newPath.backLinksReady = true
+								console.log("BACK LINKS READY")
+						}
+
+						if ((newPath.secondLinks.length > 2000 || newPath.frontLinksReady )&& (newPath.confirmedBackLinks.length > 1000 || newPath.backLinksReady)){
+							res.send({fronts:newPath.secondLinks, backs:newPath.confirmedBackLinks, finsihed: "back"})
+							newPath.delivered = true 
+							return
+						}
+
+				})
+			})
+		})
+	})
+	// End backlinks
+
 
 		// front links
 		newPath.getLinksOnPage(newPath.startPage, function(innerResponse) {
@@ -114,52 +161,6 @@ app.post('/get-links', function(req, res) {
 		// End front links
 
 
-		//Start backlinks
-	newPath.getLinksOnBacklinkPage(newPath.finishPage, function(response) {
-		if (newPath.delivered) return
-		console.log("Starting BL")
-		newPath.firstBackLinks = response
-		newPath.firstBackLinks.forEach(function(page, index) {
-				if (newPath.delivered) return
-			newPath.getLinksOnPage(page, function(responseTwo) {
-					if (newPath.delivered) return
-				// console.log("BL", index,newPath.firstBackLinks.length)
-				// console.log(newPath.secondLinks)
-
-				responseTwo.forEach(function(entryTwo, indexTwo) {
-					if (newPath.delivered) return
-					if (entryTwo[0] == newPath.finishPage) {
-						console.log("pushing into backlinks: " +newPath.confirmedBackLinks.length )
-						// console.log("fronts "+newPath.secondLinks.length,"backs"+newPath.confirmedBackLinks.length)
-
-						newPath.confirmedBackLinks.push([page, entryTwo[1]])
-						// newPath.secondLinks.forEach(function(secondLink){
-							// console.log("checking "+page+" and "+secondLink[1][0])
-						console.log(index,newPath.firstBackLinks.length - 1 ,indexTwo,responseTwo.length - 1)
-
-							// if (page === secondLink[1][0]) {
-							// 	res.send([page,secondLink])
-							// 	newPath.delivered = true
-							// 	return
-							// }
-						// })
-						}
-						if (index == newPath.firstBackLinks.length - 1 && indexTwo == responseTwo.length - 1) {
-								newPath.backLinksReady = true
-								console.log("BACK LINKS READY")
-						}
-
-						if ((newPath.secondLinks.length > 2000 || newPath.frontLinksReady )&& (newPath.confirmedBackLinks.length > 1000 || newPath.backLinksReady)){
-							res.send({fronts:newPath.secondLinks, backs:newPath.confirmedBackLinks, finsihed: "back"})
-							newPath.delivered = true 
-							return
-						}
-
-				})
-			})
-		})
-	})
-	// End backlinks
 
 
 })
