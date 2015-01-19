@@ -22,7 +22,7 @@ module.exports = {
 			degree1: [],
 			degree2: []
 		}
-		this.getLinksOnPage = function(page, callback) {
+		this.getLinksOnPage = function(page, howmany, callback) {
 				var url = "http://en.wikipedia.org" + page
 				request(url, function(error, response, html) {
 					if (!error && response.statusCode == 200) {
@@ -41,8 +41,8 @@ module.exports = {
 							}
 						})
 						var uniqueHrefArray = arrayUnique(linkDataArray)
-						if (uniqueHrefArray.length > 300) {
-							callback(getRandomSubarray(uniqueHrefArray, 300))
+						if (uniqueHrefArray.length > howmany) {
+							callback(getRandomSubarray(uniqueHrefArray, howmany))
 						} else {
 							callback(uniqueHrefArray)
 						}
@@ -50,7 +50,7 @@ module.exports = {
 					}
 				})
 			},
-			this.getLinksOnBacklinkPage = function(page, callback) {
+			this.getLinksOnBacklinkPage = function(page, howmany,callback) {
 				var url = "http://en.wikipedia.org/w/index.php?title=Special:WhatLinksHere/" + page.substring(6) + "&limit=10000"
 				request(url, function(error, response, html) {
 					if (!error && response.statusCode == 200) {
@@ -67,8 +67,8 @@ module.exports = {
 
 						})
 						var uniqueHrefArray = arrayUnique(hrefArray)
-						if (uniqueHrefArray.length > 1200) {
-							callback(getRandomSubarray(uniqueHrefArray, 1200))
+						if (uniqueHrefArray.length > howmany) {
+							callback(getRandomSubarray(uniqueHrefArray, howmany))
 						} else {
 							callback(uniqueHrefArray)
 						}
