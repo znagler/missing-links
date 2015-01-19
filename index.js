@@ -58,13 +58,13 @@ app.post('/get-links', function(req, res) {
 
 
 		//Start backlinks
-	newPath.getLinksOnBacklinkPage(newPath.finishPage, 3000,function(response) {
+	newPath.getLinksOnBacklinkPage(newPath.finishPage, 1000,function(response) {
 		if (newPath.delivered) return
 		console.log("Starting BL")
 		newPath.firstBackLinks = response
 		newPath.firstBackLinks.forEach(function(page, index) {
 				if (newPath.delivered) return
-			newPath.getLinksOnPage(page, 2000,function(responseTwo) {
+			newPath.getLinksOnPage(page, 1000,function(responseTwo) {
 					if (newPath.delivered) return
 				// console.log("BL", index,newPath.firstBackLinks.length)
 				// console.log(newPath.secondLinks)
@@ -92,8 +92,8 @@ app.post('/get-links', function(req, res) {
 								console.log("BACK LINKS READY")
 						}
 
-						if ((newPath.secondLinks.length > 2500 || newPath.frontLinksReady )&& (newPath.confirmedBackLinks.length > 2500 || newPath.backLinksReady)){
-							res.send({fronts:newPath.secondLinks, backs:newPath.confirmedBackLinks, finsihed: "back"})
+						if ((newPath.secondLinks.length > 1500 || newPath.frontLinksReady )&& (newPath.confirmedBackLinks.length > 1500 || newPath.backLinksReady)){
+							res.send({fronts:newPath.secondLinks, backs:newPath.confirmedBackLinks, finsihed: "back",frontlinksready:newPath.frontLinksReady ,backlinksready: newPath.backLinksReady})
 							newPath.delivered = true 
 							return
 						}
@@ -105,7 +105,7 @@ app.post('/get-links', function(req, res) {
 	// End backlinks
 
 		// front links
-		newPath.getLinksOnPage(newPath.startPage,1000,function(innerResponse) {
+		newPath.getLinksOnPage(newPath.startPage,800,function(innerResponse) {
 			console.log("starting FL")
 			newPath.firstLinks = innerResponse
 			console.log("links on front page:"+newPath.firstLinks.length)
@@ -140,7 +140,7 @@ app.post('/get-links', function(req, res) {
 						}
 
 						if ((newPath.secondLinks.length > 2500 || newPath.frontLinksReady )&& (newPath.confirmedBackLinks.length > 2500 || newPath.backLinksReady)){
-							res.send({fronts:newPath.secondLinks, backs:newPath.confirmedBackLinks, finsihed:"front"}) 
+							res.send({fronts:newPath.secondLinks, backs:newPath.confirmedBackLinks, finsihed:"front",frontlinksready:newPath.frontLinksReady ,backlinksready: newPath.backLinksReady}) 
 							return
 						}
 
