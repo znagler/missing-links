@@ -87,7 +87,8 @@ app.post('/get-links', function(req, res) {
 							// }
 						// })
 						}
-						if (index == newPath.firstBackLinks.length && !newPath.backLinksReady) {
+						if (index == newPath.firstBackLinks.length - 1 && !newPath.backLinksReady) {
+							console.log("Backlinks Ready")
 								newPath.backLinksReady = true
 						}
 

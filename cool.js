@@ -33,18 +33,18 @@ module.exports = {
 						$(links).each(function(i, link) {
 							var href = $(link).attr('href')
 							var linkDataItem = []
-							if (link.children[0] && /^\/wiki[^:]*$/.test(href) && href != page && href != "/wiki/Main_Page" && href != "/wiki/International_Standard_Book_Number") {
+							if (link.children[0] && /^\/wiki[^:]*$/.test(href) && href != page && href != "/wiki/Main_Page" && href != "/wiki/International_Standard_Book_Number" && link.children[0].data) {
 								linkDataItem[0] = href
 								linkDataItem[1] = link.children[0].data
 								linkDataArray[index] = linkDataItem
 								index++
 							}
 						})
-						var uniqueHrefArray = arrayUnique(linkDataArray)
-						if (uniqueHrefArray.length > howmany) {
-							callback(getRandomSubarray(uniqueHrefArray, howmany))
+						// var uniqueHrefArray = arrayUnique(linkDataArray)
+						if (linkDataArray.length > howmany) {
+							callback(linkDataArray.slice(0,howmany))
 						} else {
-							callback(uniqueHrefArray)
+							callback(linkDataArray)
 						}
 						return
 					}
@@ -66,11 +66,11 @@ module.exports = {
 							}
 
 						})
-						var uniqueHrefArray = arrayUnique(hrefArray)
-						if (uniqueHrefArray.length > howmany) {
-							callback(getRandomSubarray(uniqueHrefArray, howmany))
+						// var uniqueHrefArray = arrayUnique(hrefArray)
+						if (hrefArray.length > howmany) {
+							callback(hrefArray.slice(0,howmany))
 						} else {
-							callback(uniqueHrefArray)
+							callback(hrefArray)
 						}
 						return
 					}
@@ -79,22 +79,22 @@ module.exports = {
 	}
 }
 
-var getRandomSubarray = function(arr, size) {
-	var shuffled = arr.slice(0),
-		i = arr.length,
-		temp, index;
-	while (i--) {
-		index = Math.floor((i + 1) * Math.random());
-		temp = shuffled[index];
-		shuffled[index] = shuffled[i];
-		shuffled[i] = temp;
-	}
-	return shuffled.slice(0, size);
-}
+// var getRandomSubarray = function(arr, size) {
+// 	var shuffled = arr.slice(0),
+// 		i = arr.length,
+// 		temp, index;
+// 	while (i--) {
+// 		index = Math.floor((i + 1) * Math.random());
+// 		temp = shuffled[index];
+// 		shuffled[index] = shuffled[i];
+// 		shuffled[i] = temp;
+// 	}
+// 	return shuffled.slice(0, size);
+// }
 
-var arrayUnique = function(a) {
-	return a.reduce(function(p, c) {
-		if (p.indexOf(c) < 0) p.push(c)
-		return p
-	}, [])
-}
+// var arrayUnique = function(a) {
+// 	return a.reduce(function(p, c) {
+// 		if (p.indexOf(c) < 0) p.push(c)
+// 		return p
+// 	}, [])
+// }
