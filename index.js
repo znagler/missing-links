@@ -48,7 +48,6 @@ console.log("defining  post")
 app.post('/get-links', function(req, res) {
 
 	console.log("post firing")
-	console.log(req)
 	req.setTimeout(8 * 60 * 1000, function() {
 		console.log("timeout");
 		req.abort();
@@ -93,7 +92,7 @@ app.post('/get-links', function(req, res) {
 								newPath.backLinksReady = true
 						}
 
-						if (((newPath.secondLinks.length > 800 || newPath.frontLinksReady )&& (newPath.confirmedBackLinks.length > 200 || newPath.backLinksReady)) ||  newPath.secondLinks.length > 5000 ){
+						if ((newPath.secondLinks.length > 800 || newPath.frontLinksReady )&& (newPath.confirmedBackLinks.length > 200 || newPath.backLinksReady)){
 							res.send({fronts:newPath.secondLinks, backs:newPath.confirmedBackLinks, finsihed: "back",frontlinksready:newPath.frontLinksReady ,backlinksready: newPath.backLinksReady})
 							newPath.delivered = true 
 							return
@@ -106,7 +105,7 @@ app.post('/get-links', function(req, res) {
 	// End backlinks
 
 		// front links
-		newPath.getLinksOnPage(newPath.startPage,300,function(innerResponse) {
+		newPath.getLinksOnPage(newPath.startPage,150,function(innerResponse) {
 			console.log("starting FL")
 			newPath.firstLinks = innerResponse
 			console.log("links on front page:"+newPath.firstLinks.length)
@@ -140,7 +139,7 @@ app.post('/get-links', function(req, res) {
 								newPath.frontLinksReady = true
 						}
 
-						if (((newPath.secondLinks.length > 800 || newPath.frontLinksReady )&& (newPath.confirmedBackLinks.length > 200 || newPath.backLinksReady)) ||  newPath.secondLinks.length > 5000 ){
+						if ((newPath.secondLinks.length > 100 || newPath.frontLinksReady )&& (newPath.confirmedBackLinks.length > 200 || newPath.backLinksReady)){
 							res.send({fronts:newPath.secondLinks, backs:newPath.confirmedBackLinks, finsihed:"front",frontlinksready:newPath.frontLinksReady ,backlinksready: newPath.backLinksReady}) 
 							return
 						}
