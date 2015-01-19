@@ -74,6 +74,7 @@ function setEvents() {
 }
 
 function startInputAjax() {
+	console.log("firing start ajax")
 	$.ajax({
 			url: '/start',
 			type: 'POST',
@@ -90,6 +91,7 @@ function startInputAjax() {
 
 
 function finishInputAjax() {
+	console.log("firing finish ajax")
 	$.ajax({
 			url: '/finish',
 			type: 'POST',
