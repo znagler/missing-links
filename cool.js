@@ -41,8 +41,8 @@ module.exports = {
 							}
 						})
 						var uniqueHrefArray = arrayUnique(linkDataArray)
-						if (uniqueHrefArray.length > 200) {
-							callback(getRandomSubarray(uniqueHrefArray, 200))
+						if (uniqueHrefArray.length > 300) {
+							callback(getRandomSubarray(uniqueHrefArray, 300))
 						} else {
 							callback(uniqueHrefArray)
 						}
@@ -67,8 +67,8 @@ module.exports = {
 
 						})
 						var uniqueHrefArray = arrayUnique(hrefArray)
-						if (uniqueHrefArray.length > 200) {
-							callback(getRandomSubarray(uniqueHrefArray, 200))
+						if (uniqueHrefArray.length > 1000) {
+							callback(getRandomSubarray(uniqueHrefArray, 1000))
 						} else {
 							callback(uniqueHrefArray)
 						}

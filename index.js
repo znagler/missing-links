@@ -90,8 +90,8 @@ app.post('/get-links', function(req, res) {
 								newPath.frontLinksReady = true
 						}
 
-						if ((newPath.secondLinks.length > 2500 || newPath.frontLinksReady )&& (newPath.confirmedBackLinks.length > 500 || newPath.backLinksReady)){
-							res.send({fronts:newPath.secondLinks, backs:newPath.confirmedBackLinks}) 
+						if ((newPath.secondLinks.length > 2000 || newPath.frontLinksReady )&& (newPath.confirmedBackLinks.length > 1000 || newPath.backLinksReady)){
+							res.send({fronts:newPath.secondLinks, backs:newPath.confirmedBackLinks, finsihed:"front"}) 
 							return
 						}
 
@@ -149,8 +149,8 @@ app.post('/get-links', function(req, res) {
 								console.log("BACK LINKS READY")
 						}
 
-						if ((newPath.secondLinks.length > 2500 || newPath.frontLinksReady )&& (newPath.confirmedBackLinks.length > 500 || newPath.backLinksReady)){
-							res.send({fronts:newPath.secondLinks, backs:newPath.confirmedBackLinks})
+						if ((newPath.secondLinks.length > 2000 || newPath.frontLinksReady )&& (newPath.confirmedBackLinks.length > 1000 || newPath.backLinksReady)){
+							res.send({fronts:newPath.secondLinks, backs:newPath.confirmedBackLinks, finsihed: "back"})
 							newPath.delivered = true 
 							return
 						}
