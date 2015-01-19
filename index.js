@@ -58,13 +58,13 @@ app.post('/get-links', function(req, res) {
 
 
 		//Start backlinks
-	newPath.getLinksOnBacklinkPage(newPath.finishPage, 800,function(response) {
+	newPath.getLinksOnBacklinkPage(newPath.finishPage, 150,function(response) {
 		if (newPath.delivered) return
 		console.log("Starting BL")
 		newPath.firstBackLinks = response
 		newPath.firstBackLinks.forEach(function(page, index) {
 				if (newPath.delivered) return
-			newPath.getLinksOnPage(page, 800,function(responseTwo) {
+			newPath.getLinksOnPage(page, 100,function(responseTwo) {
 					if (newPath.delivered) return
 				// console.log("BL", index,newPath.firstBackLinks.length)
 				// console.log(newPath.secondLinks)
@@ -92,7 +92,7 @@ app.post('/get-links', function(req, res) {
 								newPath.backLinksReady = true
 						}
 
-						if ((newPath.secondLinks.length > 800 || newPath.frontLinksReady )&& (newPath.confirmedBackLinks.length > 200 || newPath.backLinksReady)){
+						if ((newPath.secondLinks.length > 100 || newPath.frontLinksReady )&& (newPath.confirmedBackLinks.length > 200 || newPath.backLinksReady)){
 							res.send({fronts:newPath.secondLinks, backs:newPath.confirmedBackLinks, finsihed: "back",frontlinksready:newPath.frontLinksReady ,backlinksready: newPath.backLinksReady})
 							newPath.delivered = true 
 							return
