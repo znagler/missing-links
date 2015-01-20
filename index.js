@@ -161,11 +161,23 @@ app.post('/get-links', function(req, res) {
 			})
 		})
 		// End front links
-
-
-
-
 })
+
+
+
+
+app.post('/get-pages-for-spinner', function(req, res) {
+		var spinPath = new cool.Path(req.body.startPage, req.body.finishPage)
+		var test = req.body.startPage
+
+		spinPath.getLinksOnPage(req.body.startPage,150,function(response) {
+			
+		res.send(response)
+		})
+	})
+
+
+
 
 
 

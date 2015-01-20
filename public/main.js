@@ -6,9 +6,22 @@ $(document).ready(function() {
 	$("button").click(function() {
 		console.log("button click")
 
-
 		var startPage = ("/wiki/" + $('.show-start').text());
 		var finishPage = ("/wiki/" + $('.show-finish').text());
+
+		$.ajax({
+				url: '/get-pages-for-spinner',
+				type: 'POST',
+				data: {
+					startPage: startPage,
+				},
+			})
+			.done(function(response) {
+				console.log(response)
+				var dummyArr = ["/wiki/1", "/wiki/2", "/wiki/3", "/wiki/4", "/wiki/5", "/wiki/6"]
+				kickOffSpinner(dummyArr)
+
+			})
 
 		$.ajax({
 				url: '/get-links',
@@ -18,29 +31,36 @@ $(document).ready(function() {
 					finishPage: finishPage
 				},
 			})
-			.fail(function(jqXHR, textStatus ) {
-				console.log("failed but trying again...")
-    	// $("button").click()
- 			 })
+			.fail(function(jqXHR, textStatus) {
+				$('.results').append("sorry, nothing found")
+					// $("button").click()
+			})
 			.done(function(response) {
-				$('.results').append(response)
 
-				// console.log(startPage)
 				console.log(response)
-				response.backs.forEach(function(backArray){
+				var solutions = []
+				response.backs.forEach(function(backArray) {
 
-					response.fronts.forEach(function(frontArray){
-						if (frontArray[0] == backArray[0]){
-							console.log(frontArray,backArray)
+					response.fronts.forEach(function(frontArray) {
+						if (frontArray[0] == backArray[0]) {
+							solutions.push(frontArray.concat(backArray))
+							console.log(frontArray.concat(backArray))
 						}
 					})
 				})
 				console.log("done checking")
-					// console.log(finishPage)
+				console.log(solutions)
+				if (solutions.length > 0) {
+					var startPage = ("/wiki/" + $('.show-start').text());
+
+					$('.results').append("start at" + startPage + " , click '" + solutions[0][3] + "'' (" + solutions[0][2] + "), click '" + solutions[0][1] + "' (" + solutions[0][0] + ") and look for " + solutions[0][5])
+
+				}
+				// console.log(finishPage)
 
 			})
 			.always(function() {
-				console.log("always")
+				// console.log("always")
 			})
 
 	})
@@ -134,5 +154,20 @@ function buildDisplay(start, links, finish) {
 	var div = "<div>" + start + "->"
 	div += finish + "<div>"
 	return div
+
+}
+
+function kickOffSpinner(spinArray) {
+	console.log(spinArray)
+	var interval = setInterval(doStuff(spinArray), 75)
+	var counter = 0
+	var spinArrayLength = spinArray.length
+
+	function doStuff(spinArray) {
+		console.log(spinArray)
+		$('.spin-zone').text(spinArray[counter % spinArray.length])
+		console.log("spin")
+		counter++
+	}
 
 }
