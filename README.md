@@ -1,36 +1,3 @@
-# node-js-getting-started
+Missing Links is an Express/node app that finds a link chain between Wikipedia articles.  It uses the node module, Cheerio, to scrape Wikipedia, and is deployed with AWS.
 
-A barebones Node.js app using [Express 4](http://expressjs.com/).
-
-This application support the [Getting Started with Node on Heroku](https://devcenter.heroku.com/articles/getting-started-with-nodejs) article - check it out.
-
-## Running Locally
-
-Make sure you have [Node.js](http://nodejs.org/) and the [Heroku Toolbelt](https://toolbelt.heroku.com/) installed.
-
-```sh
-$ git clone git@github.com:heroku/node-js-getting-started.git # or clone your own fork
-$ cd node-js-getting-started
-$ npm install
-$ npm start
-```
-
-Your app should now be running on [localhost:5000](http://localhost:5000/).
-
-## Deploying to Heroku
-
-```
-$ heroku create
-$ git push heroku master
-$ heroku open
-```
-
-## Documentation
-
-For more information about using Node.js on Heroku, see these Dev Center articles:
-
-- [Getting Started with Node.js on Heroku](https://devcenter.heroku.com/articles/getting-started-with-nodejs)
-- [Heroku Node.js Support](https://devcenter.heroku.com/articles/nodejs-support)
-- [Node.js on Heroku](https://devcenter.heroku.com/categories/nodejs)
-- [Best Practices for Node.js Development](https://devcenter.heroku.com/articles/node-best-practices)
-- [Using WebSockets on Heroku with Node.js](https://devcenter.heroku.com/articles/node-websockets)
+I went with this approach INSTEAD of the the Wikipedia API because through scraping I can get not just the links (hrefs) but also the text of the link, which is often different.  This allows for the app to give precise directions from one page to the other, but the limitation is that it can only find links between articles that are 2-3 'jumps' away (because I only want to scrape ~500 pages per click).
