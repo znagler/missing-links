@@ -8,7 +8,7 @@ $(document).ready(function() {
 
 		var startPage = ("/wiki/" + $('.show-start').text());
 		var finishPage = ("/wiki/" + $('.show-finish').text());
-
+		var stopSpinner = null
 		$.ajax({
 				url: '/get-pages-for-spinner',
 				type: 'POST',
@@ -17,9 +17,10 @@ $(document).ready(function() {
 				},
 			})
 			.done(function(response) {
-				console.log(response)
-				var dummyArr = ["/wiki/1", "/wiki/2", "/wiki/3", "/wiki/4", "/wiki/5", "/wiki/6"]
-				kickOffSpinner(dummyArr)
+				// console.log(response)
+				stopSpinner = kickOffSpinner(response)
+
+
 
 			})
 
@@ -36,8 +37,8 @@ $(document).ready(function() {
 					// $("button").click()
 			})
 			.done(function(response) {
+				if (stopSpinner) stopSpinner()
 
-				console.log(response)
 				var solutions = []
 				response.backs.forEach(function(backArray) {
 
@@ -49,7 +50,7 @@ $(document).ready(function() {
 					})
 				})
 				console.log("done checking")
-				console.log(solutions)
+				// console.log(solutions)
 				if (solutions.length > 0) {
 					var startPage = ("/wiki/" + $('.show-start').text());
 
@@ -158,16 +159,17 @@ function buildDisplay(start, links, finish) {
 }
 
 function kickOffSpinner(spinArray) {
-	console.log(spinArray)
-	var interval = setInterval(doStuff(spinArray), 75)
 	var counter = 0
+	var interval = setInterval(doStuff, 75)
 	var spinArrayLength = spinArray.length
 
-	function doStuff(spinArray) {
-		console.log(spinArray)
+	function doStuff() {
 		$('.spin-zone').text(spinArray[counter % spinArray.length])
-		console.log("spin")
 		counter++
+	}
+
+	return function(){
+		clearInterval(interval)
 	}
 
 }

@@ -21,7 +21,6 @@ app.get('/', function(request, response) {
 })
 
 app.post('/start', function(req, res) {
-	console.log(req.body)
 	var url = "http://en.wikipedia.org/wiki/" + (req.body.start_wiki.split(' ').join('_'))
 	request(url, function(error, response, html) {
 		if (!error && response.statusCode == 200) {
@@ -58,13 +57,13 @@ app.post('/get-links', function(req, res) {
 
 
 		//Start backlinks
-	newPath.getLinksOnBacklinkPage(newPath.finishPage, 150,function(response) {
+	newPath.getLinksOnBacklinkPage(newPath.finishPage, 400,function(response) {
 		if (newPath.delivered) return
-		console.log("Starting BL")
+		// console.log("Starting BL")
 		newPath.firstBackLinks = response
 		newPath.firstBackLinks.forEach(function(page, index) {
 				if (newPath.delivered) return
-			newPath.getLinksOnPage(page, 100,function(responseTwo) {
+			newPath.getLinksOnPage(page, 200,function(responseTwo) {
 					if (newPath.delivered) return
 				// console.log("BL", index,newPath.firstBackLinks.length)
 				// console.log(newPath.secondLinks)
@@ -88,11 +87,12 @@ app.post('/get-links', function(req, res) {
 						// })
 						}
 						if (index == newPath.firstBackLinks.length - 1 && !newPath.backLinksReady) {
-							console.log("Backlinks Ready")
+							// console.log("Backlinks Ready")
 								newPath.backLinksReady = true
 						}
 
 						if ((newPath.secondLinks.length > 100 || newPath.frontLinksReady )&& (newPath.confirmedBackLinks.length > 200 || newPath.backLinksReady)){
+							if (newPath.delivered) return
 							res.send({fronts:newPath.secondLinks, backs:newPath.confirmedBackLinks, finsihed: "back",frontlinksready:newPath.frontLinksReady ,backlinksready: newPath.backLinksReady})
 							newPath.delivered = true 
 							return
@@ -105,10 +105,10 @@ app.post('/get-links', function(req, res) {
 	// End backlinks
 
 		// front links
-		newPath.getLinksOnPage(newPath.startPage,150,function(innerResponse) {
-			console.log("starting FL")
+		newPath.getLinksOnPage(newPath.startPage,400,function(innerResponse) {
+			// console.log("starting FL")
 			newPath.firstLinks = innerResponse
-			console.log("links on front page:"+newPath.firstLinks.length)
+			// console.log("links on front page:"+newPath.firstLinks.length)
 
 			newPath.firstLinks.forEach(function(page, innerIndex) {
 				if (newPath.delivered) return
@@ -124,7 +124,7 @@ app.post('/get-links', function(req, res) {
 				// 		return
 				// 	}
 				// })
-				newPath.getLinksOnPage(page[0], 100,function(innerResponseTwo) {
+				newPath.getLinksOnPage(page[0], 200,function(innerResponseTwo) {
 					if (newPath.delivered) return
 					// console.log(innerIndex, newPath.firstLinks.length)
 					innerResponseTwo.forEach(function(entryTwo, innerIndexTwo) {
@@ -140,6 +140,7 @@ app.post('/get-links', function(req, res) {
 						}
 
 						if ((newPath.secondLinks.length > 100 || newPath.frontLinksReady )&& (newPath.confirmedBackLinks.length > 200 || newPath.backLinksReady)){
+							if (newPath.delivered) return
 							res.send({fronts:newPath.secondLinks, backs:newPath.confirmedBackLinks, finsihed:"front",frontlinksready:newPath.frontLinksReady ,backlinksready: newPath.backLinksReady}) 
 							return
 						}
