@@ -45,6 +45,7 @@ app.post('/finish', function(req, res) {
 
 console.log("defining  post")
 app.post('/get-links', function(req, res) {
+	console.log(req.body)
 
 	console.log("post firing")
 	req.setTimeout(8 * 60 * 1000, function() {
@@ -92,7 +93,7 @@ app.post('/get-links', function(req, res) {
 						}
 
 						if ((newPath.secondLinks.length > 100 || newPath.frontLinksReady )&& (newPath.confirmedBackLinks.length > 200 || newPath.backLinksReady)){
-							if (newPath.delivered) return
+							if (newPath.delivered) res.end()
 							res.send({fronts:newPath.secondLinks, backs:newPath.confirmedBackLinks, finsihed: "back",frontlinksready:newPath.frontLinksReady ,backlinksready: newPath.backLinksReady})
 							newPath.delivered = true 
 							return
@@ -140,7 +141,7 @@ app.post('/get-links', function(req, res) {
 						}
 
 						if ((newPath.secondLinks.length > 100 || newPath.frontLinksReady )&& (newPath.confirmedBackLinks.length > 200 || newPath.backLinksReady)){
-							if (newPath.delivered) return
+							if (newPath.delivered) res.end()
 							res.send({fronts:newPath.secondLinks, backs:newPath.confirmedBackLinks, finsihed:"front",frontlinksready:newPath.frontLinksReady ,backlinksready: newPath.backLinksReady}) 
 							return
 						}
