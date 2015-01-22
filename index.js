@@ -146,6 +146,8 @@ app.post('/get-links', function(req, res) {
 							if (newPath.delivered) res.end()
 							res.send({fronts:newPath.secondLinks, backs:newPath.confirmedBackLinks, finsihed:"front",frontlinksready:newPath.frontLinksReady ,backlinksready: newPath.backLinksReady}) 
 							return
+						} else {
+							console.log(newPath.secondLinks.length, newPath.confirmedBackLinks.length)
 						}
 
 						// newPath.confirmedBackLinks.forEach(function(backlink) {
