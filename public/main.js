@@ -37,6 +37,8 @@ $(document).ready(function() {
 					// $("button").click()
 			})
 			.done(function(response) {
+
+				console.log(response)
 				if (stopSpinner) stopSpinner()
 
 				var solutions = []

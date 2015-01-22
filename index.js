@@ -97,6 +97,8 @@ app.post('/get-links', function(req, res) {
 							res.send({fronts:newPath.secondLinks, backs:newPath.confirmedBackLinks, finsihed: "back",frontlinksready:newPath.frontLinksReady ,backlinksready: newPath.backLinksReady})
 							newPath.delivered = true 
 							return
+						} else {
+							console.log(newPath.secondLinks.length, newPath.confirmedBackLinks.length)
 						}
 
 				})
