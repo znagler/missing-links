@@ -8,7 +8,7 @@ var cool = require('./cool')
 var form_submitting = false
 app.set('views', __dirname + '/public/views')
 app.set('view engine', 'ejs')
-app.set('port', (process.env.PORT || 5000))
+app.set('port', (9000))
 app.use(bodyParser.urlencoded({
 	extended: true
 }));
