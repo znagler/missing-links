@@ -1,6 +1,4 @@
 $(document).ready(function() {
-	console.log("doc ready")
-
 	setEvents()
 
 	$("button").click(function() {
@@ -40,11 +38,11 @@ $(document).ready(function() {
 				} else {
 					viewArray = success(response.bl, response.fl)
 					if (!viewArray) {
-						$('.results').append("Nothing found")
+						$('.results').text("Nothing found")
 						return
 					}
 				}
-				$('.results').append("start at" + startPage + " , click '" + viewArray[5] + "'' (" + viewArray[4] + "), click '" + viewArray[3] + "' (" + viewArray[2] + ") and look for " + viewArray[1])
+				$('.results').text("start at" + startPage + " , click '" + viewArray[5] + "'' (" + viewArray[4] + "), click '" + viewArray[3] + "' (" + viewArray[2] + ") and look for " + viewArray[1])
 			})
 			.always(function() {})
 	})
@@ -89,7 +87,6 @@ function setEvents() {
 }
 
 function startInputAjax() {
-	console.log("firing start ajax")
 	$.ajax({
 			url: '/start',
 			type: 'POST',
@@ -106,7 +103,6 @@ function startInputAjax() {
 
 
 function finishInputAjax() {
-	console.log("firing finish ajax")
 	$.ajax({
 			url: '/finish',
 			type: 'POST',

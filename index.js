@@ -16,7 +16,6 @@ app.use(bodyParser.json());
 
 app.use(express.static(__dirname + '/public'))
 app.get('/', function(request, response) {
-	console.log("get")
 	response.render('index.ejs')
 })
 
@@ -31,7 +30,6 @@ app.post('/start', function(req, res) {
 })
 
 app.post('/finish', function(req, res) {
-	console.log("finish post firing")
 	var url = "http://en.wikipedia.org/wiki/" + (req.body.finish_wiki.split(' ').join('_'))
 	request(url, function(error, response, html) {
 		if (!error && response.statusCode == 200) {
@@ -42,14 +40,11 @@ app.post('/finish', function(req, res) {
 })
 
 
-
-console.log("defining  post")
 app.post('/get-links', function(req, res) {
-	console.log(req.body)
+	// console.log(req.body)
 
-	console.log("post firing")
+	// console.log("post firing")
 	req.setTimeout(8 * 60 * 1000, function() {
-		console.log("timeout");
 		req.abort();
 	});
 
@@ -113,7 +108,7 @@ app.post('/get-links', function(req, res) {
 							solution = newPath.success()
 							if (solution) {
 								res.send({
-									foundAt: 25,
+									solved: true,
 									solution: solution
 								})
 								newPath.delivered = true

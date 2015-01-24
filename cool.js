@@ -82,8 +82,6 @@ module.exports = {
 
 				for (i = 0; i < this.confirmedBackLinks.length; i++) {
 					for (j = 0; j < this.secondLinks.length; j++) {
-
-						console.log(this.confirmedBackLinks[i][0], this.secondLinks[j][0])
 						if (this.confirmedBackLinks[i][0] == this.secondLinks[j][0]) {
 							return this.confirmedBackLinks[i].concat(this.secondLinks[j])
 						}
