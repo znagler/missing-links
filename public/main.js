@@ -40,21 +40,20 @@ $(document).ready(function() {
 
 				console.log(response)
 				if (stopSpinner) stopSpinner()
+				var viewArray = []
 				if (response.solved) {
-				$('.results').append("start at" + startPage + " , click '" + response.solution[5] + "'' (" + response.solution[4] + "), click '" + response.solution[3] + "' (" + response.solution[2] + ") and look for " + response.solution[1])
+					viewArray = response.solution
 				} else {
-				for (i = 0; i < response.bl.length; i++) { 
-					for (j = 0; j < response.fl.length; j++) { 	
-						// console.log(response.bl[i][0],response.fl[j][0])
-						if (response.bl[i][0] == response.fl[j][0]) {
-							console.log(response.bl[i].concat(response.fl[j]))
-						}
+					viewArray = success(response.bl, response.fl)
+					if (!viewArray){
+						$('.results').append("Nothing found")
+						return
 					}
 				}
-				}
 
+				$('.results').append("start at" + startPage + " , click '" + viewArray[5] + "'' (" + viewArray[4] + "), click '" + viewArray[3] + "' (" + viewArray[2] + ") and look for " + viewArray[1])
 
-				// var response.solution = []
+				// var viewArray = []
 				// response.backs.forEach(function(backArray) {
 
 				// 	response.fronts.forEach(function(frontArray) {
@@ -186,5 +185,35 @@ function kickOffSpinner(spinArray) {
 	return function(){
 		clearInterval(interval)
 	}
+
+}
+
+
+function success(bl, fl){
+	console.log("SUCCESS CALLED")
+	console.log("SUCCESS CALLED")
+	console.log("SUCCESS CALLED")
+	console.log("SUCCESS CALLED")
+	console.log("SUCCESS CALLED")
+	console.log(bl.length)
+	console.log(fl.length)
+	console.log("checking for success with",bl.length * fl.length)
+
+	for (i = 0; i < bl.length; i++) { 
+		for (j = 0; j < fl.length; j++) { 	
+
+			if (bl[i][0] == fl[j][0]) {
+				console.log("*****************************")
+				console.log("*****************************")
+				console.log("*****************************")
+				console.log("*****************************")
+				console.log("*****************************")
+				return bl[i].concat(fl[j])
+			}
+		}
+	}
+	console.log("nothing found at 25")
+
+	return null
 
 }
