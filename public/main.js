@@ -4,8 +4,6 @@ $(document).ready(function() {
 	setEvents()
 
 	$("button").click(function() {
-		console.log("button click")
-
 		var startPage = ("/wiki/" + $('.show-start').text());
 		var finishPage = ("/wiki/" + $('.show-finish').text());
 		var stopSpinner = null
@@ -19,9 +17,6 @@ $(document).ready(function() {
 			.done(function(response) {
 				// console.log(response)
 				stopSpinner = kickOffSpinner(response)
-
-
-
 			})
 
 		$.ajax({
@@ -37,7 +32,6 @@ $(document).ready(function() {
 					// $("button").click()
 			})
 			.done(function(response) {
-
 				console.log(response)
 				if (stopSpinner) stopSpinner()
 				var viewArray = []
@@ -45,41 +39,15 @@ $(document).ready(function() {
 					viewArray = response.solution
 				} else {
 					viewArray = success(response.bl, response.fl)
-					if (!viewArray){
+					if (!viewArray) {
 						$('.results').append("Nothing found")
 						return
 					}
 				}
-
 				$('.results').append("start at" + startPage + " , click '" + viewArray[5] + "'' (" + viewArray[4] + "), click '" + viewArray[3] + "' (" + viewArray[2] + ") and look for " + viewArray[1])
-
-				// var viewArray = []
-				// response.backs.forEach(function(backArray) {
-
-				// 	response.fronts.forEach(function(frontArray) {
-				// 		if (frontArray[0] == backArray[0]) {
-				// 			solutions.push(frontArray.concat(backArray))
-				// 			console.log(frontArray.concat(backArray))
-				// 		}
-				// 	})
-				// })
-				console.log("done checking")
-				// console.log(solutions)
-				// if (solutions.length > 0) {
-				// 	var startPage = ("/wiki/" + $('.show-start').text());
-
-				// 	$('.results').append("start at" + startPage + " , click '" + solutions[0][3] + "'' (" + solutions[0][2] + "), click '" + solutions[0][1] + "' (" + solutions[0][0] + ") and look for " + solutions[0][5])
-
-				// }
-				// console.log(finishPage)
-
 			})
-			.always(function() {
-				// console.log("always")
-			})
-
+			.always(function() {})
 	})
-
 })
 
 
@@ -99,7 +67,6 @@ function setButtonColorAndMessage() {
 	} else {
 		$("button").removeClass('button-red')
 	}
-
 }
 
 function setEvents() {
@@ -182,37 +149,23 @@ function kickOffSpinner(spinArray) {
 		counter++
 	}
 
-	return function(){
+	return function() {
 		clearInterval(interval)
 	}
 
 }
 
 
-function success(bl, fl){
-	console.log("SUCCESS CALLED")
-	console.log("SUCCESS CALLED")
-	console.log("SUCCESS CALLED")
-	console.log("SUCCESS CALLED")
-	console.log("SUCCESS CALLED")
-	console.log(bl.length)
-	console.log(fl.length)
-	console.log("checking for success with",bl.length * fl.length)
+function success(bl, fl) {
 
-	for (i = 0; i < bl.length; i++) { 
-		for (j = 0; j < fl.length; j++) { 	
+	for (i = 0; i < bl.length; i++) {
+		for (j = 0; j < fl.length; j++) {
 
 			if (bl[i][0] == fl[j][0]) {
-				console.log("*****************************")
-				console.log("*****************************")
-				console.log("*****************************")
-				console.log("*****************************")
-				console.log("*****************************")
 				return bl[i].concat(fl[j])
 			}
 		}
 	}
-	console.log("nothing found at 25")
 
 	return null
 

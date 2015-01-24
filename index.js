@@ -58,82 +58,81 @@ app.post('/get-links', function(req, res) {
 
 
 	//Start backlinks
-	console.log("initial backlink request")
 	newPath.getLinksOnBacklinkPage(newPath.finishPage, 400, function(backLinkResponse) {
-			console.log("BL ready")
 
-			newPath.getLinksOnPage(newPath.startPage, 400, function(frontLinkResponse) {
-				console.log("initial backlink response")
-				console.log("BL length: ", backLinkResponse.length)
-				console.log("FL length: ", frontLinkResponse.length)
+		newPath.getLinksOnPage(newPath.startPage, 400, function(frontLinkResponse) {
+			// console.log("initial backlink response")
+			// console.log("BL length: ", backLinkResponse.length)
+			// console.log("FL length: ", frontLinkResponse.length)
 
-					a = getZippedArrayAndLeftOvers(backLinkResponse, frontLinkResponse)
-
-				console.log("zip", a[0].length)
-				console.log("leftovers", a[1].length)
-				console.log("zip0", a[0][0])
-				console.log("zip1", a[0][1])
-				console.log("zip2", a[0][2])
+			a = getZippedArrayAndLeftOvers(backLinkResponse, frontLinkResponse)
+			a[0].concat(a[1]).forEach(function(link, index) {
 
 
-
-				a[0].concat(a[1]).forEach(function(link, index) {
-
-
-					// console.log(index)
-					if ((index % 2 && index <= a[0].length) || (index > a[0].length && !a[2]) ) { //front
-						// 	console.log("front")
-						newPath.getLinksOnPage(link[0], 200, function(frontLinkPageLinks) {
-							if (newPath.delivered) res.end()
-								if (!newPath.delivered && index === (a[0].concat(a[1])).length - 1) res.send({solved: false, bl: newPath.confirmedBackLinks, fl: newPath.secondLinks})
-
-							if (newPath.confirmedBackLinks.length > 25 && !newPath.checkAt25){
-								newPath.checkAt25 = true
-								console.log("CHECK AT 25")
-								solution = newPath.success()
-								if (solution) {
-									res.send({solved: true, solution: solution})
-									newPath.delivered = true
-									res.end()
-									}
-							}
-
-							console.log("responseF",index,newPath.secondLinks.length,newPath.confirmedBackLinks.length)
-							frontLinkPageLinks.forEach(function(frontPageLink) {
-							newPath.secondLinks.push([frontPageLink[0], frontPageLink[1], link[0], link[1]])
-
-							})
+				// console.log(index)
+				if ((index % 2 && index <= a[0].length) || (index > a[0].length && !a[2])) { //front
+					// 	console.log("front")
+					newPath.getLinksOnPage(link[0], 200, function(frontLinkPageLinks) {
+						if (newPath.delivered) res.end()
+						if (!newPath.delivered && index === (a[0].concat(a[1])).length - 1) res.send({
+							solved: false,
+							bl: newPath.confirmedBackLinks,
+							fl: newPath.secondLinks
 						})
 
-					} else { //back
-						// console.log("attempting bl with index ", link)
-						newPath.getLinksOnPage(link, 200, function(backLinkPageLinks) {
-								if (newPath.delivered) res.end()
-								if (!newPath.delivered && index === (a[0].concat(a[1])).length - 1) res.send({solved: false, bl: newPath.confirmedBackLinks, fl: newPath.secondLinks})
-							if (newPath.confirmedBackLinks.length > 25 && !newPath.checkAt25){
-								newPath.checkAt25 = true
-								console.log("CHECK AT 25")
-								solution = newPath.success()
-								if (solution) {
-									res.send({foundAt: 25, solution: solution})
-									newPath.delivered = true
-									res.end()
-									}
-							}
-
-								console.log("responseB",index,newPath.secondLinks.length,newPath.confirmedBackLinks.length)
-
-								backLinkPageLinks.forEach(function(frontlink) {
-									if (frontlink[0] == newPath.finishPage) {
-										// console.log("confirmed bl")
-										newPath.confirmedBackLinks.push([link, frontlink[1]])
-									}
+						if (newPath.confirmedBackLinks.length > 25 && !newPath.checkAt25) {
+							newPath.checkAt25 = true
+							solution = newPath.success()
+							if (solution) {
+								res.send({
+									solved: true,
+									solution: solution
 								})
-							})
-					}
-				})
+								newPath.delivered = true
+								res.end()
+							}
+						}
+
+						// console.log("responseF",index,newPath.secondLinks.length,newPath.confirmedBackLinks.length)
+						frontLinkPageLinks.forEach(function(frontPageLink) {
+							newPath.secondLinks.push([frontPageLink[0], frontPageLink[1], link[0], link[1]])
+
+						})
+					})
+
+				} else { //back
+					newPath.getLinksOnPage(link, 200, function(backLinkPageLinks) {
+						if (newPath.delivered) res.end()
+						if (!newPath.delivered && index === (a[0].concat(a[1])).length - 1) res.send({
+							solved: false,
+							bl: newPath.confirmedBackLinks,
+							fl: newPath.secondLinks
+						})
+						if (newPath.confirmedBackLinks.length > 25 && !newPath.checkAt25) {
+							newPath.checkAt25 = true
+							solution = newPath.success()
+							if (solution) {
+								res.send({
+									foundAt: 25,
+									solution: solution
+								})
+								newPath.delivered = true
+								res.end()
+							}
+						}
+
+						// console.log("responseB",index,newPath.secondLinks.length,newPath.confirmedBackLinks.length)
+						backLinkPageLinks.forEach(function(frontlink) {
+							if (frontlink[0] == newPath.finishPage) {
+								// console.log("confirmed bl")
+								newPath.confirmedBackLinks.push([link, frontlink[1]])
+							}
+						})
+					})
+				}
 			})
 		})
+	})
 })
 
 
@@ -165,13 +164,11 @@ var arrayUnique = function(a) {
 var getZippedArrayAndLeftOvers = function(backlinks, frontlinks) {
 	var backlinksLonger = false
 	if (backlinks.length > frontlinks.length) backlinksLonger = true
-	var largerLength = Math.max(backlinks.length,frontlinks.length)
-	var smallerLength = Math.min(backlinks.length,frontlinks.length)
+	var largerLength = Math.max(backlinks.length, frontlinks.length)
+	var smallerLength = Math.min(backlinks.length, frontlinks.length)
 	zippedArray = []
 	leftovers = []
 	counter = 0
-	console.log("larger length", largerLength)
-	console.log("smaller length", smallerLength)
 
 	while (counter < largerLength) {
 		if (counter < smallerLength) {

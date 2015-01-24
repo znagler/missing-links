@@ -32,18 +32,18 @@ module.exports = {
 						var linkDataArray = []
 						var index = 0
 						$(links).each(function(i, link) {
-							var href = $(link).attr('href')
-							var linkDataItem = []
-							if (link.children[0] && /^\/wiki[^:]*$/.test(href) && href != page && href != "/wiki/Main_Page" && href != "/wiki/International_Standard_Book_Number" && link.children[0].data) {
-								linkDataItem[0] = href
-								linkDataItem[1] = link.children[0].data
-								linkDataArray[index] = linkDataItem
-								index++
-							}
-						})
-						// var uniqueHrefArray = arrayUnique(linkDataArray)
+								var href = $(link).attr('href')
+								var linkDataItem = []
+								if (link.children[0] && /^\/wiki[^:]*$/.test(href) && href != page && href != "/wiki/Main_Page" && href != "/wiki/International_Standard_Book_Number" && link.children[0].data) {
+									linkDataItem[0] = href
+									linkDataItem[1] = link.children[0].data
+									linkDataArray[index] = linkDataItem
+									index++
+								}
+							})
+							// var uniqueHrefArray = arrayUnique(linkDataArray)
 						if (linkDataArray.length > howmany) {
-							callback(linkDataArray.slice(0,howmany))
+							callback(linkDataArray.slice(0, howmany))
 						} else {
 							callback(linkDataArray)
 						}
@@ -51,7 +51,7 @@ module.exports = {
 					}
 				})
 			},
-			this.getLinksOnBacklinkPage = function(page, howmany,callback) {
+			this.getLinksOnBacklinkPage = function(page, howmany, callback) {
 				var url = "http://en.wikipedia.org/w/index.php?title=Special:WhatLinksHere/" + page.substring(6) + "&limit=400"
 				request(url, function(error, response, html) {
 					if (!error && response.statusCode == 200) {
@@ -60,17 +60,17 @@ module.exports = {
 						var hrefArray = []
 						var index = 0
 						$(links).each(function(i, link) {
-							var href = $(link).attr('href')
-							if (/^\/wiki[^:]*$/.test(href) && href != page && href != "/wiki/Main_Page" && href != "/wiki/International_Standard_Book_Number") {
-								hrefArray[index] = href
-								index++
-							}
+								var href = $(link).attr('href')
+								if (/^\/wiki[^:]*$/.test(href) && href != page && href != "/wiki/Main_Page" && href != "/wiki/International_Standard_Book_Number") {
+									hrefArray[index] = href
+									index++
+								}
 
-						})
-						// var uniqueHrefArray = arrayUnique(hrefArray)
+							})
+							// var uniqueHrefArray = arrayUnique(hrefArray)
 						if (hrefArray.length > howmany) {
-							callback(getRandomSubarray(hrefArray,howmany))
-							// callback(hrefArray.slice(0,howmany))
+							callback(getRandomSubarray(hrefArray, howmany))
+								// callback(hrefArray.slice(0,howmany))
 						} else {
 							callback(hrefArray)
 						}
@@ -78,32 +78,17 @@ module.exports = {
 					}
 				})
 			},
-			this.success = function(){
-				console.log("SUCCESS CALLED")
-				console.log("SUCCESS CALLED")
-				console.log("SUCCESS CALLED")
-				console.log("SUCCESS CALLED")
-				console.log("SUCCESS CALLED")
-				console.log(this.confirmedBackLinks.length)
-				console.log(this.secondLinks.length)
-				console.log("checking for success with",this.confirmedBackLinks.length * this.secondLinks.length)
+			this.success = function() {
 
-				for (i = 0; i < this.confirmedBackLinks.length; i++) { 
-					for (j = 0; j < this.secondLinks.length; j++) { 	
+				for (i = 0; i < this.confirmedBackLinks.length; i++) {
+					for (j = 0; j < this.secondLinks.length; j++) {
 
-						console.log(this.confirmedBackLinks[i][0],this.secondLinks[j][0])
+						console.log(this.confirmedBackLinks[i][0], this.secondLinks[j][0])
 						if (this.confirmedBackLinks[i][0] == this.secondLinks[j][0]) {
-							console.log("*****************************")
-							console.log("*****************************")
-							console.log("*****************************")
-							console.log("*****************************")
-							console.log("*****************************")
 							return this.confirmedBackLinks[i].concat(this.secondLinks[j])
 						}
 					}
 				}
-				console.log("nothing found at 25")
-
 				return null
 
 			}
@@ -129,5 +114,3 @@ var getRandomSubarray = function(arr, size) {
 // 		return p
 // 	}, [])
 // }
-
-
