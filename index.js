@@ -53,29 +53,34 @@ app.post('/get-links', function(req, res) {
 
 
 	//Start backlinks
-	newPath.getLinksOnBacklinkPage(newPath.finishPage, 400, function(backLinkResponse) {
+	newPath.getLinksOnBacklinkPage(newPath.finishPage, 200, function(backLinkResponse) {
 
-		newPath.getLinksOnPage(newPath.startPage, 400, function(frontLinkResponse) {
+		newPath.getLinksOnPage(newPath.startPage, 200, function(frontLinkResponse) {
 			// console.log("initial backlink response")
 			// console.log("BL length: ", backLinkResponse.length)
 			// console.log("FL length: ", frontLinkResponse.length)
 
 			a = getZippedArrayAndLeftOvers(backLinkResponse, frontLinkResponse)
-			a[0].concat(a[1]).forEach(function(link, index) {
-
+			var allPagesToScrape = a[0].concat(a[1]).slice(0,250)
+			console.log("full length:",allPagesToScrape.length)
+			allPagesToScrape.forEach(function(link, index) {
 
 				// console.log(index)
 				if ((index % 2 && index <= a[0].length) || (index > a[0].length && !a[2])) { //front
 					// 	console.log("front")
 					newPath.getLinksOnPage(link[0], 200, function(frontLinkPageLinks) {
 						if (newPath.delivered) res.end()
-						if (!newPath.delivered && index === (a[0].concat(a[1])).length - 1) res.send({
+						if (!newPath.delivered && (index === allPagesToScrape.length - 1 ) ) { 
+							console.log("at 250")
+							res.send({
 							solved: false,
 							bl: newPath.confirmedBackLinks,
 							fl: newPath.secondLinks
 						})
+						}
 
 						if (newPath.confirmedBackLinks.length > 25 && !newPath.checkAt25) {
+							console.log("check happening at:",index)
 							newPath.checkAt25 = true
 							solution = newPath.success()
 							if (solution) {
@@ -98,12 +103,15 @@ app.post('/get-links', function(req, res) {
 				} else { //back
 					newPath.getLinksOnPage(link, 200, function(backLinkPageLinks) {
 						if (newPath.delivered) res.end()
-						if (!newPath.delivered && index === (a[0].concat(a[1])).length - 1) res.send({
+						if (!newPath.delivered && (index === allPagesToScrape.length - 1) ) {
+							console.log("at 250")
+							res.send({
 							solved: false,
 							bl: newPath.confirmedBackLinks,
 							fl: newPath.secondLinks
-						})
+						})}
 						if (newPath.confirmedBackLinks.length > 25 && !newPath.checkAt25) {
+							console.log("check happening at:",index)
 							newPath.checkAt25 = true
 							solution = newPath.success()
 							if (solution) {
@@ -156,7 +164,7 @@ var arrayUnique = function(a) {
 }
 
 
-var getZippedArrayAndLeftOvers = function(backlinks, frontlinks) {
+var getZippedArrayAndLeftOvers = function(backlinks, frontlinks,lengthlimit) {
 	var backlinksLonger = false
 	if (backlinks.length > frontlinks.length) backlinksLonger = true
 	var largerLength = Math.max(backlinks.length, frontlinks.length)
