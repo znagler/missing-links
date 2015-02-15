@@ -4,7 +4,7 @@ var request = require('request')
 var cheerio = require('cheerio')
 var http = require('http')
 var bodyParser = require('body-parser')
-var cool = require('./cool')
+var bridge = require('./bridge')
 var form_submitting = false
 app.set('views', __dirname + '/public/views')
 app.set('view engine', 'ejs')
@@ -48,7 +48,7 @@ app.post('/get-links', function(req, res) {
 		req.abort();
 	});
 
-	var newPath = new cool.Path(req.body.startPage, req.body.finishPage)
+	var newPath = new bridge.Path(req.body.startPage, req.body.finishPage)
 
 
 
@@ -140,8 +140,9 @@ app.post('/get-links', function(req, res) {
 
 
 app.post('/get-pages-for-spinner', function(req, res) {
-	var spinPath = new cool.Path(req.body.startPage, req.body.finishPage)
-	var test = req.body.startPage
+	console.log(req.body)
+	console.log(req.body.startPage,req.body.finishPage)
+	var spinPath = new bridge.Path(req.body.startPage, req.body.finishPage)
 
 	spinPath.getLinksOnPage(req.body.startPage, 150, function(response) {
 

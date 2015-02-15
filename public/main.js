@@ -2,6 +2,7 @@ $(document).ready(function() {
 	setEvents()
 
 	$("button").click(function() {
+		$('.results').text("")
 		var startPage = ("/wiki/" + $('.show-start').text());
 		var finishPage = ("/wiki/" + $('.show-finish').text());
 		var stopSpinner = null
@@ -10,10 +11,10 @@ $(document).ready(function() {
 				type: 'POST',
 				data: {
 					startPage: startPage,
+					finsihPage: finishPage,
 				},
 			})
 			.done(function(response) {
-				// console.log(response)
 				stopSpinner = kickOffSpinner(response)
 			})
 
@@ -42,7 +43,9 @@ $(document).ready(function() {
 						return
 					}
 				}
-				$('.results').text("start at" + startPage + " , click '" + viewArray[5] + "'' (" + viewArray[4] + "), click '" + viewArray[3] + "' (" + viewArray[2] + ") and look for " + viewArray[1])
+				$('.results').text("start at" + startPage + " , click '" + viewArray[5] + "' (" + viewArray[4] + "), click '" + viewArray[3] + "' (" + viewArray[2] + ") and look for '" + viewArray[1] + "'")
+				clearOldSearch()
+				
 			})
 			.always(function() {})
 	})
@@ -141,7 +144,7 @@ function kickOffSpinner(spinArray) {
 	var spinArrayLength = spinArray.length
 
 	function doStuff() {
-		$('.spin-zone').text(spinArray[counter % spinArray.length])
+		$('.spin-zone').text(spinArray[counter % spinArray.length][0])
 		counter++
 	}
 
@@ -151,6 +154,13 @@ function kickOffSpinner(spinArray) {
 
 }
 
+function clearOldSearch(){
+	$('.spin-zone').text("")
+	$('#sw').val("")
+	$('#fw').val("")
+	$("button").removeClass('button-red')
+	$("button").text("...")
+}
 
 function success(bl, fl) {
 
