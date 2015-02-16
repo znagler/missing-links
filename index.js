@@ -47,34 +47,28 @@ app.post('/get-links', function(req, res) {
 	})
 
 	var newPath = new bridge.Path(req.body.startPage, req.body.finishPage)
-
-	//Start backlinks
 	newPath.getLinksOnBacklinkPage(newPath.finishPage, 200, function(backLinkResponse) {
-
 		newPath.getLinksOnPage(newPath.startPage, 200, function(frontLinkResponse) {
-			// console.log("initial backlink response")
 			// console.log("BL length: ", backLinkResponse.length)
 			// console.log("FL length: ", frontLinkResponse.length)
 
 			var zip = getZippedArrayAndLeftOvers(backLinkResponse, frontLinkResponse)
-			var allPagesToScrape = zip[0].concat(zip[1]).slice(0,250)
-			// console.log("full length:",allPagesToScrape.length)
+			var allPagesToScrape = zip[0].concat(zip[1]).slice(0, 250)
+				// console.log("full length:",allPagesToScrape.length)
 			allPagesToScrape.forEach(function(link, index) {
-
 				// console.log(index)
 				if ((index % 2 && index <= zip[0].length) || (index > zip[0].length && !zip[2])) { //front
 					// 	console.log("front")
 					newPath.getLinksOnPage(link[0], 200, function(frontLinkPageLinks) {
 						if (newPath.delivered) res.end()
-						if (!newPath.delivered && (index === allPagesToScrape.length - 1 ) ) { 
+						if (!newPath.delivered && (index === allPagesToScrape.length - 1)) {
 							// console.log("at 250")
 							res.send({
-							solved: false,
-							bl: newPath.confirmedBackLinks,
-							fl: newPath.secondLinks
-						})
+								solved: false,
+								bl: newPath.confirmedBackLinks,
+								fl: newPath.secondLinks
+							})
 						}
-
 						if (newPath.confirmedBackLinks.length > 25 && !newPath.checkAt25) {
 							// console.log("check happening at:",index)
 							newPath.checkAt25 = true
@@ -88,7 +82,6 @@ app.post('/get-links', function(req, res) {
 								res.end()
 							}
 						}
-
 						// console.log("responseF",index,newPath.secondLinks.length,newPath.confirmedBackLinks.length)
 						frontLinkPageLinks.forEach(function(frontPageLink) {
 							newPath.secondLinks.push([frontPageLink[0], frontPageLink[1], link[0], link[1]])
@@ -99,13 +92,14 @@ app.post('/get-links', function(req, res) {
 				} else { //back
 					newPath.getLinksOnPage(link, 200, function(backLinkPageLinks) {
 						if (newPath.delivered) res.end()
-						if (!newPath.delivered && (index === allPagesToScrape.length - 1) ) {
+						if (!newPath.delivered && (index === allPagesToScrape.length - 1)) {
 							// console.log("at 250")
 							res.send({
-							solved: false,
-							bl: newPath.confirmedBackLinks,
-							fl: newPath.secondLinks
-						})}
+								solved: false,
+								bl: newPath.confirmedBackLinks,
+								fl: newPath.secondLinks
+							})
+						}
 						if (newPath.confirmedBackLinks.length > 25 && !newPath.checkAt25) {
 							// console.log("check happening at:",index)
 							newPath.checkAt25 = true
@@ -133,12 +127,8 @@ app.post('/get-links', function(req, res) {
 
 
 app.post('/get-pages-for-spinner', function(req, res) {
-	console.log(req.body)
-	console.log(req.body.startPage,req.body.finishPage)
 	var spinPath = new bridge.Path(req.body.startPage, req.body.finishPage)
-
 	spinPath.getLinksOnPage(req.body.startPage, 150, function(response) {
-
 		res.send(response)
 	})
 })
@@ -158,7 +148,7 @@ var arrayUnique = function(a) {
 }
 
 
-var getZippedArrayAndLeftOvers = function(backlinks, frontlinks,lengthlimit) {
+var getZippedArrayAndLeftOvers = function(backlinks, frontlinks, lengthlimit) {
 	var backlinksLonger = false
 	if (backlinks.length > frontlinks.length) backlinksLonger = true
 	var largerLength = Math.max(backlinks.length, frontlinks.length)
@@ -178,5 +168,4 @@ var getZippedArrayAndLeftOvers = function(backlinks, frontlinks,lengthlimit) {
 		counter++
 	}
 	return [zippedArray, leftovers, backlinksLonger]
-
 }
