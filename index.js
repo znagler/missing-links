@@ -41,16 +41,12 @@ app.post('/finish', function(req, res) {
 
 
 app.post('/get-links', function(req, res) {
-	// console.log(req.body)
 
-	// console.log("post firing")
 	req.setTimeout(8 * 60 * 1000, function() {
-		req.abort();
-	});
+		req.abort()
+	})
 
 	var newPath = new bridge.Path(req.body.startPage, req.body.finishPage)
-
-
 
 	//Start backlinks
 	newPath.getLinksOnBacklinkPage(newPath.finishPage, 200, function(backLinkResponse) {
@@ -60,18 +56,18 @@ app.post('/get-links', function(req, res) {
 			// console.log("BL length: ", backLinkResponse.length)
 			// console.log("FL length: ", frontLinkResponse.length)
 
-			a = getZippedArrayAndLeftOvers(backLinkResponse, frontLinkResponse)
-			var allPagesToScrape = a[0].concat(a[1]).slice(0,250)
-			console.log("full length:",allPagesToScrape.length)
+			var zip = getZippedArrayAndLeftOvers(backLinkResponse, frontLinkResponse)
+			var allPagesToScrape = zip[0].concat(zip[1]).slice(0,250)
+			// console.log("full length:",allPagesToScrape.length)
 			allPagesToScrape.forEach(function(link, index) {
 
 				// console.log(index)
-				if ((index % 2 && index <= a[0].length) || (index > a[0].length && !a[2])) { //front
+				if ((index % 2 && index <= zip[0].length) || (index > zip[0].length && !zip[2])) { //front
 					// 	console.log("front")
 					newPath.getLinksOnPage(link[0], 200, function(frontLinkPageLinks) {
 						if (newPath.delivered) res.end()
 						if (!newPath.delivered && (index === allPagesToScrape.length - 1 ) ) { 
-							console.log("at 250")
+							// console.log("at 250")
 							res.send({
 							solved: false,
 							bl: newPath.confirmedBackLinks,
@@ -80,7 +76,7 @@ app.post('/get-links', function(req, res) {
 						}
 
 						if (newPath.confirmedBackLinks.length > 25 && !newPath.checkAt25) {
-							console.log("check happening at:",index)
+							// console.log("check happening at:",index)
 							newPath.checkAt25 = true
 							solution = newPath.success()
 							if (solution) {
@@ -104,14 +100,14 @@ app.post('/get-links', function(req, res) {
 					newPath.getLinksOnPage(link, 200, function(backLinkPageLinks) {
 						if (newPath.delivered) res.end()
 						if (!newPath.delivered && (index === allPagesToScrape.length - 1) ) {
-							console.log("at 250")
+							// console.log("at 250")
 							res.send({
 							solved: false,
 							bl: newPath.confirmedBackLinks,
 							fl: newPath.secondLinks
 						})}
 						if (newPath.confirmedBackLinks.length > 25 && !newPath.checkAt25) {
-							console.log("check happening at:",index)
+							// console.log("check happening at:",index)
 							newPath.checkAt25 = true
 							solution = newPath.success()
 							if (solution) {

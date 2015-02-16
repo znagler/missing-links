@@ -43,7 +43,7 @@ $(document).ready(function() {
 						return
 					}
 				}
-				$('.results').text("start at" + startPage + " , click '" + viewArray[5] + "' (" + viewArray[4] + "), click '" + viewArray[3] + "' (" + viewArray[2] + ") and look for '" + viewArray[1] + "'")
+				$('.results').text("start at " + startPage + " , click '" + viewArray[5] + "' (" + viewArray[4] + "), click '" + viewArray[3] + "' (" + viewArray[2] + ") and look for '" + viewArray[1] + "'")
 				clearOldSearch()
 				
 			})

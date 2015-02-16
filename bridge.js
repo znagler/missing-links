@@ -9,7 +9,6 @@ module.exports = {
 		this.startPage = startPage
 		this.finishPage = finishPage
 		this.firstLinks = []
-		this.nameTest = "hi"
 		this.secondLinks = []
 		this.firstBackLinks = null
 		this.secondLinks = []
@@ -18,11 +17,6 @@ module.exports = {
 		this.confirmedBackLinks = []
 		this.delivered = false
 		this.checkAt25 = false
-		this.successObject = {
-			degree0: null,
-			degree1: [],
-			degree2: []
-		}
 		this.getLinksOnPage = function(page, howmany, callback) {
 				var url = "http://en.wikipedia.org" + page
 				request(url, function(error, response, html) {
