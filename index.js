@@ -119,11 +119,8 @@ app.post('/get-links', function(req, res) {
 								res.end()
 							}
 						}
-
-						// console.log("responseB",index,newPath.secondLinks.length,newPath.confirmedBackLinks.length)
 						backLinkPageLinks.forEach(function(frontlink) {
 							if (frontlink[0] == newPath.finishPage) {
-								// console.log("confirmed bl")
 								newPath.confirmedBackLinks.push([link, frontlink[1]])
 							}
 						})

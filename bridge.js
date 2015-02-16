@@ -8,11 +8,7 @@ module.exports = {
 	Path: function(startPage, finishPage) {
 		this.startPage = startPage
 		this.finishPage = finishPage
-		// this.firstLinks = []
 		this.secondLinks = []
-		// this.firstBackLinks = null
-		this.frontLinksReady = false
-		this.backLinksReady = false
 		this.confirmedBackLinks = []
 		this.delivered = false
 		this.checkAt25 = false
